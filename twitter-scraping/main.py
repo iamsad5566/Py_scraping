@@ -1,9 +1,11 @@
-from selenium import webdriver
-import os
+from manipulateComponents import ManipulateComponents
 
 class TwitterPyScraping:
     def __init__(self) -> None:
-        print("I am good")
+        self.manipulate = ManipulateComponents()
+        self.manipulate.login()
+        self.manipulate.search()
+    
         
         
 if __name__ == "__main__":

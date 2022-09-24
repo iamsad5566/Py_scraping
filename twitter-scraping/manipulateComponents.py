@@ -1,13 +1,16 @@
 from configuration.config import Config
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
 import time
 
-class ProcessController:
+class ManipulateComponents:
     def __init__(self) -> None:
         self.config = Config()
+        self.driver = self.config.getDriver()
         
     def login(self) -> None:
-        driver = self.config.getDriver()
+        driver = self.driver
         driver.get("https://twitter.com/i/flow/login")
         time.sleep(5)
         # Key in account name
@@ -27,7 +30,15 @@ class ProcessController:
         # Key in password
         time.sleep(3)
         inputEle = driver.find_element(By.XPATH, "//*[@id=\"layers\"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input")
-        inputEle.send_keys(self.config.getPassword())     
-        loginButton = driver.find_element(By.XPATH, "//*[@id=\"layers\"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div")
+        inputEle.send_keys(self.config.getPassword())
+        loginButton = driver.find_element(By.XPATH, "//*[@id=\"layers\"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div/span/span")
         loginButton.click()
+        
+    def search(self):
+        time.sleep(6)
+        driver = self.driver
+        searchInput = driver.find_element(By.XPATH, "//*[@id=\"react-root\"]/div/div/div[2]/main/div/div/div/div[2]/div/div[2]/div/div/div/div[1]/div/div/div/form/div[1]/div/div/div/label/div[2]/div/input")
+        searchInput.send_keys("Taiwan")
+        searchInput.send_keys(Keys.RETURN)
         time.sleep(10)
+        
