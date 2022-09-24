@@ -1,4 +1,3 @@
 twitter-scraping/.env
-twitter-scraping/configuration/__pycache__/*
-twitter-scraping/configuration/*
-twitter-scraping/__pycache__/*
+twitter-scraping/configuration/__pycache__
+twitter-scraping/__pycache__
