@@ -1,6 +1,6 @@
 # py_scraping projects
 ---
-## Titter-scraping
+## Twitter-scraping
 > scraping information from twitter by using selenium  
 
 Virtual environment: Python 3.10.1  

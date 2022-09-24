@@ -6,6 +6,7 @@ import os
 class Config:
     def __init__(self) -> None:
         load_dotenv()
+        
     def getDriver(self):
         system = os.getenv("OS")
         prefix = os.getcwd()
@@ -19,14 +20,15 @@ class Config:
             case "mac_ARM":
                 path = prefix + "/chromedriver_ARM"
                 return webdriver.Chrome(path)
-    def getAccountMail(self):
+            
+    def getAccountMail(self) -> str:
         mail = os.getenv("mail")
         return mail
     
-    def getAccountName(self):
+    def getAccountName(self) -> str:
         name = os.getenv("name")
         return name
     
-    def getPassword(self):
+    def getPassword(self) -> str:
         password = os.getenv("password")
         return password

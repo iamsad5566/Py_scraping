@@ -4,7 +4,7 @@ class TwitterPyScraping:
     def __init__(self) -> None:
         self.manipulate = ManipulateComponents()
         self.manipulate.login()
-        self.manipulate.search()
+        self.manipulate.search("Taiwan")
     
         
         
