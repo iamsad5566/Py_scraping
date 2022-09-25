@@ -11,10 +11,10 @@ class ManipulateComponents:
         self.config = Config()
         self.driver = self.config.getDriver()
         
-    def login(self) -> None:
+    def login(self):
         driver = self.driver
         driver.get("https://twitter.com/i/flow/login")
-        time.sleep(5)
+        time.sleep(3)
         # Key in account name
         inputEle = driver.find_element(By.XPATH, "//*[@id=\"layers\"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input")
         inputEle.send_keys(self.config.getAccountMail())
@@ -22,7 +22,7 @@ class ManipulateComponents:
         nextButton.click()
         
         # Key in user name
-        time.sleep(3)
+        time.sleep(2)
         inputEle = driver.find_element(By.TAG_NAME, "input")
         if inputEle != None:
             inputEle.send_keys(self.config.getAccountName())
@@ -30,13 +30,13 @@ class ManipulateComponents:
             nextButton.click()
         
         # Key in password
-        time.sleep(3)
+        time.sleep(2)
         inputEle = driver.find_element(By.XPATH, "//*[@id=\"layers\"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input")
         inputEle.send_keys(self.config.getPassword())
         loginButton = driver.find_element(By.XPATH, "//*[@id=\"layers\"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div/span/span")
         loginButton.click()
         
-    def search(self, keyword):
+    def firstSearch(self, keyword):
         time.sleep(5)
         driver = self.driver
         searchInput = driver.find_element(By.XPATH, "//*[@id=\"react-root\"]/div/div/div[2]/main/div/div/div/div[2]/div/div[2]/div/div/div/div[1]/div/div/div/form/div[1]/div/div/div/label/div[2]/div/input")
@@ -59,12 +59,24 @@ class ManipulateComponents:
     
     def __processArticles(self, articles, outputFile):
         for article in articles.split("\n"):
-            if len(article) < 10 or article.startswith("@"):
+            if len(article) < 15 or article.startswith("@"):
                 continue
             
             with open(outputFile, "a", newline="") as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow([article])
+    
+    def newSearch(self, keyword):
+        time.sleep(3)
+        driver = self.driver
+        searchInput = driver.find_element(By.XPATH, "//*[@id=\"react-root\"]/div/div/div[2]/main/div/div/div/div[1]/div/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div[2]/div/div/div/form/div[1]/div/div/div/label/div[2]/div/input")
+        lastKeyword = searchInput.get_attribute("value")
+        for i in range(len(lastKeyword)):
+            searchInput.send_keys(Keys.BACKSPACE)
+        time.sleep(1)
+        searchInput.send_keys(keyword)
+        searchInput.send_keys(Keys.RETURN)
+        
                 
             
     def closeDriver(self):
