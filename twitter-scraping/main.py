@@ -5,7 +5,9 @@ class TwitterPyScraping:
         self.manipulate = ManipulateComponents()
         self.manipulate.login()
         self.manipulate.search("Taiwan")
-    
+        self.manipulate.scrapeArticles(5)
+        self.manipulate.closeDriver()
+        
         
         
 if __name__ == "__main__":
