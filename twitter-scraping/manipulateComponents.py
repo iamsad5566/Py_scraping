@@ -1,4 +1,5 @@
-from lib2to3.pgen2 import driver
+import csv, os
+from datetime import datetime
 from configuration.config import Config
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -45,8 +46,26 @@ class ManipulateComponents:
     def scrapeArticles(self, run):
         time.sleep(5)
         driver = self.driver
+        now = datetime.now()
+        currDate = now.strftime("%m_%d_%y")
+        output = os.getenv("fileOutput")
+        suffix = ".csv"
+        
         for i in range(run):
             articles = driver.find_element(By.XPATH, "//*[@id=\"react-root\"]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/section/div")
-            print(articles.text)
+            self.__processArticles(articles.text, output+currDate+suffix)
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(2)
+    
+    def __processArticles(self, articles, outputFile):
+        for article in articles.split("\n"):
+            if len(article) < 10 or article.startswith("@"):
+                continue
+            
+            with open(outputFile, "a", newline="") as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([article])
+                
+            
+    def closeDriver(self):
+        self.driver.close()

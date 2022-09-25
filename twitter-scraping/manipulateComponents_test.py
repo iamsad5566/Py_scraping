@@ -2,7 +2,7 @@ import unittest
 from manipulateComponents import ManipulateComponents
 import time
 
-class testManipulateComponents(unittest.TestCase):
+class TestManipulateComponents(unittest.TestCase):
     def testLogin(self):
         ManipulateComponents().login()
         time.sleep(1)
@@ -22,4 +22,4 @@ class testManipulateComponents(unittest.TestCase):
         
 
 if __name__ == "__main__":
-    unittest.main()
+    TestManipulateComponents().testScrpeArticles()
