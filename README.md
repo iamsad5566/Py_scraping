@@ -1,16 +1,16 @@
 # py_scraping projects
 ---
 ## Twitter-scraping
-> scraping information from twitter by using selenium  
+> scraping information from Twitter by using selenium  
 
 Virtual environment: Python 3.10.1  
-To use the library, you need to create a new `.env` file in the root path, elements with this file are as following:
+To use the library, you need to create a new `.env` file in the root path, elements must within this file are as follows:
 ```
 OS=mac_ARM
 #windows, mac_x86, mac_ARM
 
-mail=your twitter registered email
-name=your twitter account name
-password=your twitter password
+mail=your Twitter registered email
+name=your Twitter account name
+password=your Twitter password
 output=output/
 ```
