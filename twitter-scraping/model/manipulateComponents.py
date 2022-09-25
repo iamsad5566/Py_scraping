@@ -10,7 +10,8 @@ class ManipulateComponents:
     def __init__(self) -> None:
         self.config = Config()
         self.driver = self.config.getDriver()
-        
+    
+    # Login twitter    
     def login(self):
         driver = self.driver
         driver.get("https://twitter.com/i/flow/login")
@@ -23,11 +24,13 @@ class ManipulateComponents:
         
         # Key in user name
         time.sleep(2)
-        inputEle = driver.find_element(By.TAG_NAME, "input")
-        if inputEle != None:
+        try:
+            inputEle = driver.find_element(By.TAG_NAME, "input")
             inputEle.send_keys(self.config.getAccountName())
             nextButton = driver.find_element(By.XPATH, "//*[@id=\"layers\"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div/div/div/div")
             nextButton.click()
+        except:
+            print("Keep moving on!")
         
         # Key in password
         time.sleep(2)
