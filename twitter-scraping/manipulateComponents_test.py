@@ -10,15 +10,16 @@ class TestManipulateComponents(unittest.TestCase):
     def testSearch(self):
         manipulateComponents = ManipulateComponents()
         manipulateComponents.login()
-        manipulateComponents.search()
+        manipulateComponents.firstSearch("Taiwan")
         time.sleep(1)
     
     def testScrpeArticles(self):
         manipulateComponents = ManipulateComponents()
         manipulateComponents.login()
-        manipulateComponents.search("Taiwan")
-        manipulateComponents.scrapeArticles(3)
-        time.sleep(1)
+        manipulateComponents.firstSearch("Taiwan")
+        manipulateComponents.scrapeArticles(1)
+        manipulateComponents.newSearch("Tennis")
+        time.sleep(100)
         
 
 if __name__ == "__main__":
