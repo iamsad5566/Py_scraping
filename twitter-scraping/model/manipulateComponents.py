@@ -65,7 +65,7 @@ class ManipulateComponents:
             if len(article) < 15 or article.startswith("@"):
                 continue
             
-            with open(outputFile, "a", newline="") as csvfile:
+            with open(outputFile, "a", newline="", encoding="UTF-8") as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow([article])
     

@@ -1,4 +1,3 @@
-from lib2to3.pgen2 import driver
 from dotenv import load_dotenv
 from selenium import webdriver
 import os
@@ -9,11 +8,12 @@ class Config:
         
     def getDriver(self) -> webdriver:
         "return a webdriver by the OS variable setted in .env file"
-        system = os.getenv("OS")
+        system = os.getenv("operateSystem")
         prefix = os.getcwd()
+        
         match system:
             case "windows":
-                path = prefix + "/chromedrive.exe"
+                path = prefix + "/chromedriver.exe"
                 return webdriver.Chrome(path)
             case "mac_x86":
                 path = prefix + "/chromedriver_x86"
