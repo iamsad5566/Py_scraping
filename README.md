@@ -19,8 +19,4 @@ password=your Twitter password
 output=output/
 ```
 
-## Version 1.0.0
-
 ## HSIAO YU
-
-## Test
