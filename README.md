@@ -14,3 +14,5 @@ name=your Twitter account name
 password=your Twitter password
 output=output/
 ```
+
+## Version 1.0.0
