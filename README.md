@@ -6,7 +6,7 @@
 Virtual environment: Python 3.10.1  
 To use the library, you need to create a new `.env` file in the root path, elements must within this file are as follows:
 ```
-OS=mac_ARM
+operateSystem=mac_ARM
 #windows, mac_x86, mac_ARM
 
 mail=your Twitter registered email
