@@ -1,3 +1,4 @@
+import sys
 from module.processController import ProcessController
 
 class TwitterPyScraping:
@@ -16,3 +17,4 @@ class TwitterPyScraping:
         
 if __name__ == "__main__":
     TwitterPyScraping().runMultipleSearching()
+    args = sys.argv
