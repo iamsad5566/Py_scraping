@@ -1,6 +1,8 @@
 # py_scraping projects
 ---
-## Twitter-scraping
+## Twitter-scraping &nbsp;&nbsp;&nbsp;&nbsp; Version:2.0.0
+- v1.0.0: pure python scraping
+- v2.0.0: driven by go
 > scraping information from Twitter by using selenium  
 
 Virtual environment: Python 3.10.1  
@@ -14,5 +16,3 @@ name=your Twitter account name
 password=your Twitter password
 output=output/
 ```
-
-## Version 1.0.0
