@@ -18,25 +18,14 @@ type selection struct {
 var checkedOpt selection = selection{false, false}
 
 func TwitterLayout() fyne.CanvasObject {
-	title := getTitle()
-	checkBoxes := getCheckBox()
-	button := getButton()
-	top := canvas.NewText(" ", color.Opaque)
-	top.TextSize = 50
-	content := container.NewBorder(top, nil, nil, nil, container.NewVBox(title, checkBoxes, button))
+	title := title("Twitter scraper")
+	checkBoxes := twiCheckBox()
+	button := twiButton()
+	content := container.NewVBox(title, checkBoxes, button)
 	return content
 }
 
-func getTitle() fyne.CanvasObject {
-	title := canvas.NewText("Twitter Scraper", nil)
-	title.TextSize = 50
-	title.TextStyle.Bold = true
-	space := canvas.NewText(" ", color.White)
-	content := container.NewBorder(space, space, space, space, container.NewCenter(title))
-	return content
-}
-
-func getCheckBox() fyne.CanvasObject {
+func twiCheckBox() fyne.CanvasObject {
 	label := canvas.NewText("Select a mode to execute:", color.NRGBA{60, 80, 255, 255})
 	label.TextSize = 20
 	singleBox := widget.NewCheck("Single searching", func(b bool) {
@@ -50,8 +39,8 @@ func getCheckBox() fyne.CanvasObject {
 	return content
 }
 
-func getButton() fyne.CanvasObject {
-	button := widget.NewButton("Go!", func() {
+func twiButton() fyne.CanvasObject {
+	button := widget.NewButton("                   Go!                   ", func() {
 		if checkedOpt.multiple && checkedOpt.single {
 			fmt.Println("run multiple and single!")
 		} else if !checkedOpt.multiple && checkedOpt.single {
@@ -64,6 +53,7 @@ func getButton() fyne.CanvasObject {
 	})
 	space := canvas.NewText(" ", color.Opaque)
 	horizontal := canvas.NewText("              "+
+		"                                  "+
 		"                                  "+
 		"                                  ", color.Opaque)
 	content := container.NewBorder(space, space, horizontal, horizontal, button)
