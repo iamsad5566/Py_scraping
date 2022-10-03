@@ -1,18 +1,14 @@
-package guicomponent
+package component
 
 import (
 	"fmt"
 	"image/color"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
-
-var width float32 = 600
-var height float32 = 800
 
 type selection struct {
 	single   bool
@@ -21,16 +17,7 @@ type selection struct {
 
 var checkedOpt selection = selection{false, false}
 
-func Open() {
-	guiApp := app.New()
-	window := guiApp.NewWindow("Twitter scraper GUI")
-	window.Resize(fyne.NewSize(width, height))
-	window.SetFixedSize(true)
-	window.SetContent(overallLayout())
-	window.ShowAndRun()
-}
-
-func overallLayout() fyne.CanvasObject {
+func TwitterLayout() fyne.CanvasObject {
 	title := getTitle()
 	checkBoxes := getCheckBox()
 	button := getButton()
