@@ -1,10 +1,12 @@
 package main
 
 import (
+	"image/color"
 	"py-scraper-gui/component"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 )
 
@@ -20,19 +22,22 @@ func openGUI() {
 	window := guiApp.NewWindow("Twitter scraper GUI")
 	window.Resize(fyne.NewSize(width, height))
 	// window.SetFixedSize(true)
-	window.SetContent(overLayout())
+	window.SetContent(overallLayout())
 	window.ShowAndRun()
 }
 
 // overLayout contains all the components and make them be arranged appropriately
-func overLayout() fyne.CanvasObject {
-	caSize := fyne.Size{
-		Width:  200,
-		Height: 800,
-	}
+func overallLayout() fyne.CanvasObject {
+	// caSize := fyne.Size{
+	// 	Width:  200,
+	// 	Height: 800,
+	// }
 
-	category := component.CategoryLayout()
+	category := component.ChoiceLayout()
+	space := canvas.NewText(" ", color.Opaque)
 	twitter := component.TwitterLayout()
-	content := container.NewHBox(container.NewGridWrap(caSize, category), twitter)
+	line := canvas.NewLine(color.Black)
+	content := container.NewBorder(space, space, container.NewCenter(category), space, container.NewHBox(line, container.NewCenter(twitter)))
+
 	return content
 }

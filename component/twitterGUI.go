@@ -63,7 +63,9 @@ func getButton() fyne.CanvasObject {
 		}
 	})
 	space := canvas.NewText(" ", color.Opaque)
-	horizontal := canvas.NewText("                ", color.Opaque)
+	horizontal := canvas.NewText("              "+
+		"                                  "+
+		"                                  ", color.Opaque)
 	content := container.NewBorder(space, space, horizontal, horizontal, button)
 	return content
 }
