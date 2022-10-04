@@ -28,13 +28,15 @@ func TwitterLayout() fyne.CanvasObject {
 func twiCheckBox() fyne.CanvasObject {
 	label := canvas.NewText("Select a mode to execute:", color.NRGBA{60, 80, 255, 255})
 	label.TextSize = 20
+	space := canvas.NewText(" ", color.Opaque)
+	space.TextSize = 10
 	singleBox := widget.NewCheck("Single searching", func(b bool) {
 		checkedOpt.single = b
 	})
 	multipleBox := widget.NewCheck("Multiple searching", func(b bool) {
 		checkedOpt.multiple = b
 	})
-	content := container.NewCenter(container.NewVBox(label,
+	content := container.NewCenter(container.NewVBox(label, space,
 		container.NewCenter(container.NewVBox(singleBox, multipleBox))))
 	return content
 }
@@ -52,10 +54,7 @@ func twiButton() fyne.CanvasObject {
 		}
 	})
 	space := canvas.NewText(" ", color.Opaque)
-	horizontal := canvas.NewText("              "+
-		"                                  "+
-		"                                  "+
-		"                                  ", color.Opaque)
+	horizontal := canvas.NewText(horizontalSpace, color.Opaque)
 	content := container.NewBorder(space, space, horizontal, horizontal, button)
 	return content
 }

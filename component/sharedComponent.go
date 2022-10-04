@@ -8,6 +8,11 @@ import (
 	"fyne.io/fyne/v2/container"
 )
 
+var horizontalSpace string = "              " +
+	"                                  " +
+	"                                  " +
+	"                                  "
+
 func title(str string) fyne.CanvasObject {
 	titleText := canvas.NewText(str, nil)
 	titleText.TextSize = 50
