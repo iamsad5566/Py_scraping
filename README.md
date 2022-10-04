@@ -1,4 +1,4 @@
-# py_scraping projects
+# Py_scraping projects
 ---
 ## Twitter-scraping &nbsp;&nbsp;&nbsp;&nbsp; Version:2.0.0 (Developing...)
 - v1.0.0: pure python scraping
