@@ -32,7 +32,7 @@ func openGUI() {
 // overLayout contains all the components and make them be arranged appropriately
 func overallLayout() fyne.CanvasObject {
 	var guiMap = map[string]fyne.CanvasObject{"Twitter": component.TwitterLayout(), "Facebook": component.FacebookLayout(), "News": canvas.NewText("", color.Opaque)}
-	chosen := container.NewCenter(guiMap["Twitter"])
+	chosen := container.NewCenter(guiMap[data[0]])
 	choice := widget.NewRadioGroup(data, func(s string) {
 		chosen.RemoveAll()
 		chosen.Add(guiMap[s])
