@@ -24,43 +24,26 @@ func openGUI() {
 	guiApp := app.New()
 	window := guiApp.NewWindow("Scraper GUI")
 	window.Resize(fyne.NewSize(width, height))
-	// window.SetFixedSize(true)
+	window.SetFixedSize(true)
 	window.SetContent(overallLayout())
 	window.ShowAndRun()
 }
 
 // overLayout contains all the components and make them be arranged appropriately
 func overallLayout() fyne.CanvasObject {
-	// caSize := fyne.Size{
-	// 	Width:  200,
-	// 	Height: 800,
-	// }
-
-	choice, _ := choiceLayout()
-	// space := canvas.NewText(" ", color.Opaque)
-	// line := canvas.NewLine(color.Black)
-	// content := container.NewBorder(space, space, container.NewCenter(choice), space, container.NewHBox(line, container.NewCenter(component.FacebookLayout())))
-	content := container.NewHBox(choice)
-	return content
-}
-
-func choiceLayout() (fyne.CanvasObject, fyne.CanvasObject) {
-	option, chosen := choiceList()
-	space := canvas.NewText(" ", color.Opaque)
-	content := container.NewGridWithRows(3, space, option, space)
-	return content, chosen
-}
-
-func choiceList() (fyne.CanvasObject, fyne.CanvasObject) {
-	chosen := component.TwitterLayout()
+	var guiMap = map[string]fyne.CanvasObject{"Twitter": component.TwitterLayout(), "Facebook": component.FacebookLayout(), "News": canvas.NewText("", color.Opaque)}
+	chosen := container.NewCenter(guiMap["Twitter"])
 	choice := widget.NewRadioGroup(data, func(s string) {
-		if s == "Facebook" {
-			chosen = component.FacebookLayout()
-		}
+		chosen.RemoveAll()
+		chosen.Add(guiMap[s])
 		chosen.Refresh()
 	})
 
 	space := canvas.NewText("        ", color.Opaque)
-	content := container.NewGridWithColumns(3, space, container.NewHBox(choice, chosen))
-	return content, chosen
+	choiceSpace := canvas.NewText(" ", color.Opaque)
+	line := canvas.NewLine(color.Black)
+
+	choiceList := container.NewGridWithRows(3, space, container.NewGridWithColumns(3, choiceSpace, choice, choiceSpace), space)
+	content := container.NewBorder(space, space, container.NewCenter(choiceList), space, container.NewHBox(line, chosen))
+	return content
 }
