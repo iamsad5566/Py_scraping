@@ -24,7 +24,7 @@ func openGUI() {
 	guiApp := app.New()
 	window := guiApp.NewWindow("Scraper GUI")
 	window.Resize(fyne.NewSize(width, height))
-	window.SetFixedSize(true)
+	window.SetFixedSize(false)
 	window.SetContent(overallLayout())
 	window.ShowAndRun()
 }
