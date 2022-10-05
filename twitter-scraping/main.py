@@ -18,3 +18,5 @@ class TwitterPyScraping:
 if __name__ == "__main__":
     TwitterPyScraping().runMultipleSearching()
     args = sys.argv
+    if args[1] == "":
+        print(args[1])
