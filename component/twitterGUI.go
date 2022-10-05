@@ -14,6 +14,7 @@ var option = []string{"Single searching", "Multiple searching"}
 var keyword *string
 var selected *int
 
+// TwitterLayout contains all the elements belonging to twitter related manipulations
 func TwitterLayout() fyne.CanvasObject {
 	title := title("Twitter scraper")
 	options := twiOption()
@@ -22,6 +23,7 @@ func TwitterLayout() fyne.CanvasObject {
 	return content
 }
 
+// twiOption returns a canvasObject containing the options and keyword entry
 func twiOption() fyne.CanvasObject {
 	label := canvas.NewText("Select a mode to execute:", color.NRGBA{60, 80, 255, 255})
 	label.TextSize = 20
@@ -40,6 +42,7 @@ func twiOption() fyne.CanvasObject {
 	return content
 }
 
+// searchKeyword returns a canvas object containing an input box that allows the user to key in the keyword.
 func searchKeyword(str string) fyne.CanvasObject {
 	labelText := ""
 	selection := 0
@@ -63,6 +66,7 @@ func searchKeyword(str string) fyne.CanvasObject {
 	return content
 }
 
+// twiButton returns a canvasOject containing the "GO!" button, the scraping program will be executed after pressing this button.
 func twiButton() fyne.CanvasObject {
 	button := widget.NewButton("                   Go!                   ", func() {
 		if keyword != nil {

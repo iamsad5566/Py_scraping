@@ -1,6 +1,6 @@
-# Py_scraping projects
+# Py_scraping projects&nbsp;&nbsp;&nbsp;&nbsp; Version:2.0.0 (Developing...)
 ---
-## Twitter-scraping &nbsp;&nbsp;&nbsp;&nbsp; Version:2.0.0 (Developing...)
+## Twitter-scraping 
 - v1.0.0: pure python scraping
 - v2.0.0: driven by go
 > scraping information from Twitter by using selenium  
