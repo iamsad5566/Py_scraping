@@ -1,8 +1,10 @@
 package component
 
 import (
-	"fmt"
 	"image/color"
+	"log"
+	"os/exec"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -12,7 +14,7 @@ import (
 
 var option = []string{"Single searching", "Multiple searching"}
 var keyword *string
-var selected *int
+var selected *string
 
 // TwitterLayout contains all the elements belonging to twitter related manipulations
 func TwitterLayout() fyne.CanvasObject {
@@ -45,13 +47,13 @@ func twiOption() fyne.CanvasObject {
 // searchKeyword returns a canvas object containing an input box that allows the user to key in the keyword.
 func searchKeyword(str string) fyne.CanvasObject {
 	labelText := ""
-	selection := 0
+	selection := "0"
 	if str == "Single searching" {
 		labelText = "Keyword:"
-		selection = 1
+		selection = "1"
 		selected = &selection
 	} else if str == "Multiple searching" {
-		selection = 2
+		selection = "2"
 		selected = &selection
 		labelText = "Keywords (list):"
 	}
@@ -68,16 +70,45 @@ func searchKeyword(str string) fyne.CanvasObject {
 
 // twiButton returns a canvasOject containing the "GO!" button, the scraping program will be executed after pressing this button.
 func twiButton() fyne.CanvasObject {
+	notification := canvas.NewText("", color.Opaque)
+	notification.TextSize = 30
+	notification.TextStyle.Bold = true
+
 	button := widget.NewButton("                   Go!                   ", func() {
-		if keyword != nil {
-			fmt.Println(*keyword)
+		if keyword != nil && selected != nil {
+			twiExec(keyword, selected)
+			return
+		} else if keyword != nil && selected == nil {
+			notification.Text = "Please select a mode!"
+		} else {
+			notification.Text = "Plaese fill in the keyword!"
 		}
-		if selected != nil {
-			fmt.Println(*selected)
-		}
+
+		notification.Color = color.RGBA{255, 0, 0, 255}
+		notification.Refresh()
 	})
 	space := canvas.NewText(" ", color.Opaque)
 	horizontal := canvas.NewText(horizontalSpace, color.Opaque)
-	content := container.NewBorder(space, space, horizontal, horizontal, button)
+	content := container.NewBorder(space, space, horizontal, horizontal, button, notification)
 	return content
+}
+
+// twiExec is responsible for triggering the python scraping program to be executed.
+func twiExec(keyword *string, selection *string) {
+	// First of all, source to the venv
+	cmd := exec.Command("source", "venv/bin/activate")
+	err := cmd.Run()
+	if err != nil {
+		log.Println(err)
+	}
+
+	query := strings.ReplaceAll(*keyword, " ,", ",")
+	args := strings.Split(query, ",")
+	args = append([]string{"twitter-scraping/main.py", *selection}, args...)
+
+	cmd = exec.Command("python3", args...)
+	err = cmd.Run()
+	if err != nil {
+		log.Println(err)
+	}
 }
