@@ -20,6 +20,7 @@ func main() {
 	openGUI()
 }
 
+// openGUI open a new windows which contains all the elements.
 func openGUI() {
 	guiApp := app.New()
 	window := guiApp.NewWindow("Scraper GUI")
