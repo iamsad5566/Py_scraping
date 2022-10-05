@@ -107,7 +107,7 @@ func twiExec(keyword *string, selection *string) {
 	args := strings.Split(query, ",")
 	args = append([]string{"twitter-scraping/main.py", *selection}, args...)
 
-	cmd := exec.Command("python3", args...)
+	cmd := exec.Command("venv/bin/python3", args...)
 	err := cmd.Run()
 	if err != nil {
 		log.Println(err)
