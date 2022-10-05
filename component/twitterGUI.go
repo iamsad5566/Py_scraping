@@ -12,6 +12,7 @@ import (
 
 var option = []string{"Single searching", "Multiple searching"}
 var keyword *string
+var selected *int
 
 func TwitterLayout() fyne.CanvasObject {
 	title := title("Twitter scraper")
@@ -41,16 +42,21 @@ func twiOption() fyne.CanvasObject {
 
 func searchKeyword(str string) fyne.CanvasObject {
 	labelText := ""
+	selection := 0
 	if str == "Single searching" {
 		labelText = "Keyword:"
+		selection = 1
+		selected = &selection
 	} else if str == "Multiple searching" {
+		selection = 2
+		selected = &selection
 		labelText = "Keywords (list):"
 	}
 	label := canvas.NewText(labelText, nil)
 	label.TextSize = 15
 	space := canvas.NewText(" ", color.Opaque)
 	entry := widget.NewEntry()
-	size := fyne.Size{Width: 200, Height: 60}
+	size := fyne.Size{Width: 250, Height: 50}
 	keyword = &entry.Text
 
 	content := container.NewVBox(space, label, container.NewGridWrap(size, entry))
@@ -59,7 +65,12 @@ func searchKeyword(str string) fyne.CanvasObject {
 
 func twiButton() fyne.CanvasObject {
 	button := widget.NewButton("                   Go!                   ", func() {
-		fmt.Println(*keyword)
+		if keyword != nil {
+			fmt.Println(*keyword)
+		}
+		if selected != nil {
+			fmt.Println(*selected)
+		}
 	})
 	space := canvas.NewText(" ", color.Opaque)
 	horizontal := canvas.NewText(horizontalSpace, color.Opaque)
