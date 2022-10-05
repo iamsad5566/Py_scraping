@@ -80,7 +80,5 @@ class ManipulateComponents:
         searchInput.send_keys(keyword)
         searchInput.send_keys(Keys.RETURN)
         
-                
-            
     def closeDriver(self):
         self.driver.close()

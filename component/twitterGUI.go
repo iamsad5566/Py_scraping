@@ -61,7 +61,7 @@ func searchKeyword(str string) fyne.CanvasObject {
 	label.TextSize = 15
 	space := canvas.NewText(" ", color.Opaque)
 	entry := widget.NewEntry()
-	size := fyne.Size{Width: 250, Height: 50}
+	size := fyne.Size{Width: 250, Height: 40}
 	keyword = &entry.Text
 
 	content := container.NewVBox(space, label, container.NewGridWrap(size, entry))
@@ -75,13 +75,16 @@ func twiButton() fyne.CanvasObject {
 	notification.TextStyle.Bold = true
 
 	button := widget.NewButton("                   Go!                   ", func() {
-		if keyword != nil && selected != nil {
+		if selected == nil {
+			notification.Text = "Please select a mode!"
+		} else if *keyword == "" {
+			notification.Text = "Plaese fill in the keyword!"
+		} else {
+			notification.Text = ""
+			notification.Color = color.Opaque
+			notification.Refresh()
 			twiExec(keyword, selected)
 			return
-		} else if keyword != nil && selected == nil {
-			notification.Text = "Please select a mode!"
-		} else {
-			notification.Text = "Plaese fill in the keyword!"
 		}
 
 		notification.Color = color.RGBA{255, 0, 0, 255}
@@ -89,25 +92,23 @@ func twiButton() fyne.CanvasObject {
 	})
 	space := canvas.NewText(" ", color.Opaque)
 	horizontal := canvas.NewText(horizontalSpace, color.Opaque)
-	content := container.NewBorder(space, space, horizontal, horizontal, button, notification)
+	content := container.NewVBox(container.NewBorder(space, space, horizontal, horizontal, button), container.NewCenter(notification))
 	return content
 }
 
 // twiExec is responsible for triggering the python scraping program to be executed.
 func twiExec(keyword *string, selection *string) {
-	// First of all, source to the venv
-	cmd := exec.Command("source", "venv/bin/activate")
-	err := cmd.Run()
-	if err != nil {
-		log.Println(err)
+	if *keyword == "" || *selection == "" {
+		return
 	}
 
 	query := strings.ReplaceAll(*keyword, " ,", ",")
+	query = strings.ReplaceAll(query, ", ", ",")
 	args := strings.Split(query, ",")
 	args = append([]string{"twitter-scraping/main.py", *selection}, args...)
 
-	cmd = exec.Command("python3", args...)
-	err = cmd.Run()
+	cmd := exec.Command("python3", args...)
+	err := cmd.Run()
 	if err != nil {
 		log.Println(err)
 	}
