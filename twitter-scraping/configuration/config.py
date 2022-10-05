@@ -9,7 +9,7 @@ class Config:
     def getDriver(self) -> webdriver:
         "return a webdriver by the OS variable setted in .env file"
         system = os.getenv("operateSystem")
-        prefix = os.getcwd()
+        prefix = os.getenv("PY_PATH")
         
         match system:
             case "windows":

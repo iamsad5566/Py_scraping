@@ -19,11 +19,11 @@ class ProcessController:
         # Closing the driver
         self.components.closeDriver()
         
-    def multipleSearching(self, run=5, keyword=["a", "b", "c"]):
+    def multipleSearching(self, run=5, keywords=["a", "b", "c"]):
         "For multiple searching"
-        self.__commonProcess(keyword[0], run)
-        for i in range(1, len(keyword), 1):
-            self.components.newSearch(keyword[i])
+        self.__commonProcess(keywords[0], run)
+        for i in range(1, len(keywords), 1):
+            self.components.newSearch(keywords[i])
             self.components.scrapeArticles(run)
         # Closing the driver
         self.components.closeDriver()
