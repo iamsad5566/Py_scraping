@@ -10,47 +10,66 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-type selection struct {
-	single   bool
-	multiple bool
-}
-
-var checkedOpt selection = selection{false, false}
+var option = []string{"Single searching", "Multiple searching"}
+var keyword *string
+var selected *int
 
 func TwitterLayout() fyne.CanvasObject {
 	title := title("Twitter scraper")
-	checkBoxes := twiCheckBox()
+	options := twiOption()
 	button := twiButton()
-	content := container.NewVBox(title, checkBoxes, button)
+	content := container.NewVBox(title, options, button)
 	return content
 }
 
-func twiCheckBox() fyne.CanvasObject {
+func twiOption() fyne.CanvasObject {
 	label := canvas.NewText("Select a mode to execute:", color.NRGBA{60, 80, 255, 255})
 	label.TextSize = 20
+	horizontal := canvas.NewText(horizontalSpace, color.Opaque)
 	space := canvas.NewText(" ", color.Opaque)
 	space.TextSize = 10
-	singleBox := widget.NewCheck("Single searching", func(b bool) {
-		checkedOpt.single = b
+
+	keywordBox := container.NewBorder(space, space, horizontal, horizontal, space)
+	choice := widget.NewRadioGroup(option, func(s string) {
+		keywordBox.RemoveAll()
+		keywordBox.Add(searchKeyword(s))
+		keywordBox.Refresh()
 	})
-	multipleBox := widget.NewCheck("Multiple searching", func(b bool) {
-		checkedOpt.multiple = b
-	})
-	content := container.NewCenter(container.NewVBox(label, space,
-		container.NewCenter(container.NewVBox(singleBox, multipleBox))))
+	content := container.NewVBox(container.NewCenter(container.NewVBox(label, space,
+		container.NewCenter(container.NewVBox(choice)))), keywordBox)
+	return content
+}
+
+func searchKeyword(str string) fyne.CanvasObject {
+	labelText := ""
+	selection := 0
+	if str == "Single searching" {
+		labelText = "Keyword:"
+		selection = 1
+		selected = &selection
+	} else if str == "Multiple searching" {
+		selection = 2
+		selected = &selection
+		labelText = "Keywords (list):"
+	}
+	label := canvas.NewText(labelText, nil)
+	label.TextSize = 15
+	space := canvas.NewText(" ", color.Opaque)
+	entry := widget.NewEntry()
+	size := fyne.Size{Width: 250, Height: 50}
+	keyword = &entry.Text
+
+	content := container.NewVBox(space, label, container.NewGridWrap(size, entry))
 	return content
 }
 
 func twiButton() fyne.CanvasObject {
 	button := widget.NewButton("                   Go!                   ", func() {
-		if checkedOpt.multiple && checkedOpt.single {
-			fmt.Println("run multiple and single!")
-		} else if !checkedOpt.multiple && checkedOpt.single {
-			fmt.Println("run single!")
-		} else if checkedOpt.multiple && !checkedOpt.single {
-			fmt.Println("run multiple!")
-		} else {
-			fmt.Println("Please select a mode!")
+		if keyword != nil {
+			fmt.Println(*keyword)
+		}
+		if selected != nil {
+			fmt.Println(*selected)
 		}
 	})
 	space := canvas.NewText(" ", color.Opaque)
