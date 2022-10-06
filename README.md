@@ -16,3 +16,7 @@ name=your Twitter account name
 password=your Twitter password
 output=output/
 ```
+
+# To-do list
+ - Build an interface for twitterGUI so that the code could be easier maintained
+ - Python scraping for Twitter adding a new function to scrape the tweets by ID
