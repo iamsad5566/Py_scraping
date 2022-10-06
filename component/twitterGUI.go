@@ -12,17 +12,31 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+var selects = []string{"searchByKeyword", "searchByID"}
 var option = []string{"Single searching", "Multiple searching"}
+var selection = &selects[1]
+var chosen *string
 var keyword *string
-var selected *string
 var runTime *string
 
 // TwitterLayout contains all the elements belonging to twitter related manipulations
 func TwitterLayout() fyne.CanvasObject {
 	title := title("Twitter scraper")
+
+	// Insert a selection
+	selectContent := widget.NewSelect(selects, func(s string) {
+		selection = &s
+	})
+
+	selectContainer := container.NewBorder(canvas.NewText("", color.Opaque),
+		canvas.NewText("", color.Opaque), canvas.NewText(horizontalSpace, color.Opaque),
+		canvas.NewText(horizontalSpace, color.Opaque), selectContent)
+
 	options := twiOption()
 	button := twiButton()
-	content := container.NewVBox(title, options, button)
+
+	content := container.NewVBox(title, selectContainer, options, button)
+
 	return content
 }
 
@@ -38,17 +52,17 @@ func twiOption() fyne.CanvasObject {
 	choice := widget.NewRadioGroup(option, func(s string) {
 		keywordBox.RemoveAll()
 		if len(s) > 0 {
+			chosen = &s
 			keywordBox.Add(searchKeyword(s))
-			selected = &s
 		} else {
-			selected = nil
+			chosen = nil
 			keyword = nil
 			runTime = nil
 		}
 		keywordBox.Refresh()
 	})
 
-	size := fyne.Size{Width: 200, Height: 100}
+	size := fyne.Size{Width: 200, Height: 60}
 	content := container.NewVBox(container.NewCenter(container.NewVBox(label, space,
 		container.NewCenter(container.NewGridWrap(size, choice)))), keywordBox)
 	return content
@@ -86,10 +100,12 @@ func twiButton() fyne.CanvasObject {
 	notification.TextStyle.Bold = true
 
 	button := widget.NewButton("              Go!             ", func() {
-		if selected == nil {
+		if chosen == nil {
 			notification.Text = "Please select a mode!"
-		} else if *keyword == "" {
-			notification.Text = "Plaese fill in the keyword!"
+		} else if *keyword == "" && *selection == "searchByKeyword" {
+			notification.Text = "Please fill in the keyword!"
+		} else if *keyword == "" && *selection == "searchByID" {
+			notification.Text = "Please fill in the IDs"
 		} else {
 			notification.Text = ""
 			notification.Color = color.Opaque
@@ -109,14 +125,14 @@ func twiButton() fyne.CanvasObject {
 
 // twiExec is responsible for triggering the python scraping program to be executed.
 func twiExec(keyword *string) {
-	if *keyword == "" || *selected == "" {
+	if *keyword == "" || *chosen == "" {
 		return
 	}
 
 	query := strings.ReplaceAll(*keyword, " ,", ",")
 	query = strings.ReplaceAll(query, ", ", ",")
 
-	var args = []string{"twitter-scraping/main.py", *selected}
+	var args = []string{"twitter-scraping/main.py", *chosen}
 	if runTime != nil && *runTime != "" && *runTime != "0" {
 		args = append(args, *runTime)
 	}
@@ -130,3 +146,8 @@ func twiExec(keyword *string) {
 		log.Println(err)
 	}
 }
+
+// func setLabel() string {
+// 	strSelection := &selection
+
+// }
