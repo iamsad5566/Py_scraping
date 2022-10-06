@@ -23,6 +23,7 @@ func main() {
 // openGUI open a new windows which contains all the elements.
 func openGUI() {
 	guiApp := app.New()
+	guiApp.Settings().SetTheme(&myTheme{})
 	window := guiApp.NewWindow("Scraper GUI")
 	window.Resize(fyne.NewSize(width, height))
 	window.SetFixedSize(false)

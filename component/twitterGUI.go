@@ -15,6 +15,7 @@ import (
 var option = []string{"Single searching", "Multiple searching"}
 var keyword *string
 var selected *string
+var runTime *string
 
 // TwitterLayout contains all the elements belonging to twitter related manipulations
 func TwitterLayout() fyne.CanvasObject {
@@ -29,42 +30,52 @@ func TwitterLayout() fyne.CanvasObject {
 func twiOption() fyne.CanvasObject {
 	label := canvas.NewText("Select a mode to execute:", color.NRGBA{60, 80, 255, 255})
 	label.TextSize = 20
-	horizontal := canvas.NewText(horizontalSpace, color.Opaque)
+	// horizontal := canvas.NewText(horizontalSpace, color.Opaque)
 	space := canvas.NewText(" ", color.Opaque)
 	space.TextSize = 10
 
-	keywordBox := container.NewBorder(space, space, horizontal, horizontal, space)
+	keywordBox := container.NewCenter(space)
 	choice := widget.NewRadioGroup(option, func(s string) {
 		keywordBox.RemoveAll()
-		keywordBox.Add(searchKeyword(s))
+		if len(s) > 0 {
+			keywordBox.Add(searchKeyword(s))
+			selected = &s
+		} else {
+			selected = nil
+			keyword = nil
+			runTime = nil
+		}
 		keywordBox.Refresh()
 	})
+
+	size := fyne.Size{Width: 200, Height: 100}
 	content := container.NewVBox(container.NewCenter(container.NewVBox(label, space,
-		container.NewCenter(container.NewVBox(choice)))), keywordBox)
+		container.NewCenter(container.NewGridWrap(size, choice)))), keywordBox)
 	return content
 }
 
 // searchKeyword returns a canvas object containing an input box that allows the user to key in the keyword.
 func searchKeyword(str string) fyne.CanvasObject {
 	labelText := ""
-	selection := "0"
 	if str == "Single searching" {
 		labelText = "Keyword:"
-		selection = "1"
-		selected = &selection
 	} else if str == "Multiple searching" {
-		selection = "2"
-		selected = &selection
 		labelText = "Keywords (list):"
 	}
 	label := canvas.NewText(labelText, nil)
 	label.TextSize = 15
 	space := canvas.NewText(" ", color.Opaque)
-	entry := widget.NewEntry()
-	size := fyne.Size{Width: 250, Height: 40}
-	keyword = &entry.Text
+	sizeEntry := fyne.Size{Width: 250, Height: 40}
 
-	content := container.NewVBox(space, label, container.NewGridWrap(size, entry))
+	entryKeyword := widget.NewEntry()
+	keyword = &entryKeyword.Text
+
+	labelRun := canvas.NewText("Run:", nil)
+	labelRun.TextSize = 15
+	entryRun := widget.NewEntry()
+	runTime = &entryRun.Text
+
+	content := container.NewVBox(space, label, container.NewGridWrap(sizeEntry, entryKeyword), labelRun, container.NewGridWrap(sizeEntry, entryRun))
 	return content
 }
 
@@ -74,7 +85,7 @@ func twiButton() fyne.CanvasObject {
 	notification.TextSize = 30
 	notification.TextStyle.Bold = true
 
-	button := widget.NewButton("                   Go!                   ", func() {
+	button := widget.NewButton("              Go!             ", func() {
 		if selected == nil {
 			notification.Text = "Please select a mode!"
 		} else if *keyword == "" {
@@ -83,7 +94,7 @@ func twiButton() fyne.CanvasObject {
 			notification.Text = ""
 			notification.Color = color.Opaque
 			notification.Refresh()
-			twiExec(keyword, selected)
+			twiExec(keyword)
 			return
 		}
 
@@ -97,15 +108,21 @@ func twiButton() fyne.CanvasObject {
 }
 
 // twiExec is responsible for triggering the python scraping program to be executed.
-func twiExec(keyword *string, selection *string) {
-	if *keyword == "" || *selection == "" {
+func twiExec(keyword *string) {
+	if *keyword == "" || *selected == "" {
 		return
 	}
 
 	query := strings.ReplaceAll(*keyword, " ,", ",")
 	query = strings.ReplaceAll(query, ", ", ",")
-	args := strings.Split(query, ",")
-	args = append([]string{"twitter-scraping/main.py", *selection}, args...)
+
+	var args = []string{"twitter-scraping/main.py", *selected}
+	if runTime != nil && *runTime != "" && *runTime != "0" {
+		args = append(args, *runTime)
+	}
+
+	keywords := strings.Split(query, ",")
+	args = append(args, keywords...)
 
 	cmd := exec.Command("venv/bin/python3", args...)
 	err := cmd.Run()
