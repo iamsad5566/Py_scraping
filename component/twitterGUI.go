@@ -102,10 +102,8 @@ func twiButton() fyne.CanvasObject {
 	button := widget.NewButton("              Go!             ", func() {
 		if chosen == nil {
 			notification.Text = "Please select a mode!"
-		} else if *keyword == "" && *selection == "searchByKeyword" {
+		} else if *keyword == "" {
 			notification.Text = "Please fill in the keyword!"
-		} else if *keyword == "" && *selection == "searchByID" {
-			notification.Text = "Please fill in the IDs"
 		} else {
 			notification.Text = ""
 			notification.Color = color.Opaque
@@ -146,8 +144,3 @@ func twiExec(keyword *string) {
 		log.Println(err)
 	}
 }
-
-// func setLabel() string {
-// 	strSelection := &selection
-
-// }
