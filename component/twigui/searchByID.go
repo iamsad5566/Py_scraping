@@ -2,6 +2,9 @@ package twigui
 
 import (
 	"image/color"
+	"log"
+	"os/exec"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -10,13 +13,14 @@ import (
 )
 
 type SearchByID struct {
-	Choice     string
-	LabelText  string
-	EntryInput string
-	RunTime    string
+	Choice          string
+	LabelText       string
+	EntryInput      string
+	RunTime         string
+	HorizontalSpace string
 }
 
-var _ TwiGUI = (*SearchByID)(nil)
+var _ TwiPage = (*SearchByID)(nil)
 var option = []string{"Single searching", "Multiple searching"}
 
 func (s *SearchByID) SetChoice(str string) {
@@ -39,7 +43,7 @@ func (s *SearchByID) SetLabel(str string) {
 	s.LabelText = label
 }
 
-func (s *SearchByID) SetOption() fyne.CanvasObject {
+func (s *SearchByID) GetOptionContainer() fyne.CanvasObject {
 	label := canvas.NewText("Select a mode to execute:", color.NRGBA{60, 80, 255, 255})
 	label.TextSize = 20
 	space := canvas.NewText(" ", color.Opaque)
@@ -51,7 +55,7 @@ func (s *SearchByID) SetOption() fyne.CanvasObject {
 		s.SetChoice(str)
 
 		if len(str) > 0 {
-			entryBox.Add(s.SetEntries(str))
+			entryBox.Add(s.getEntriesContainer(str))
 		}
 
 		entryBox.Refresh()
@@ -63,7 +67,7 @@ func (s *SearchByID) SetOption() fyne.CanvasObject {
 	return content
 }
 
-func (s *SearchByID) SetEntries(str string) fyne.CanvasObject {
+func (s *SearchByID) getEntriesContainer(str string) fyne.CanvasObject {
 	s.SetLabel(str)
 	label := canvas.NewText(s.LabelText, nil)
 	label.TextSize = 15
@@ -82,7 +86,54 @@ func (s *SearchByID) SetEntries(str string) fyne.CanvasObject {
 	return content
 }
 
-func (s *SearchByID) Layout() fyne.CanvasObject {
-	tmp := container.NewVBox(canvas.NewText("", color.Opaque))
-	return tmp
+func (s *SearchByID) GetButton() fyne.CanvasObject {
+	notification := canvas.NewText("", color.Opaque)
+	notification.TextSize = 30
+	notification.TextStyle.Bold = true
+
+	button := widget.NewButton("              Go!             ", func() {
+		if s.Choice == "" {
+			notification.Text = "Please select a mode!"
+		} else if s.EntryInput == "" {
+			notification.Text = "Please fill in the ID!"
+		} else {
+			notification.Text = ""
+			notification.Color = color.Opaque
+			notification.Refresh()
+			s.twiExec()
+			return
+		}
+		notification.Color = color.RGBA{255, 0, 0, 255}
+		notification.Refresh()
+
+	})
+
+	space := canvas.NewText(" ", color.Opaque)
+	horizontal := canvas.NewText(s.HorizontalSpace, color.Opaque)
+	content := container.NewVBox(container.NewBorder(space, space, horizontal, horizontal, button), container.NewCenter(notification))
+	return content
+
+}
+
+func (s *SearchByID) twiExec() {
+	if s.EntryInput == "" || s.Choice == "" {
+		return
+	}
+
+	s.EntryInput = strings.ReplaceAll(s.EntryInput, " ,", ",")
+	s.EntryInput = strings.ReplaceAll(s.EntryInput, ", ", ",")
+
+	var args = []string{"twitter-scraping/main.py", s.Choice}
+	if s.RunTime != "" && s.RunTime != "0" {
+		args = append(args, s.RunTime)
+	}
+
+	IDs := strings.Split(s.EntryInput, ",")
+	args = append(args, IDs...)
+
+	cmd := exec.Command("venv/bin/python3", args...)
+	err := cmd.Run()
+	if err != nil {
+		log.Println(err)
+	}
 }
