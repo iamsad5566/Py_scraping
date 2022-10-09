@@ -6,13 +6,11 @@ import (
 )
 
 type TwiPage interface {
-	SetLabel(str string)
-	SetChoice(str string)
 	GetOptionContainer() fyne.CanvasObject
 }
 
 // Draw returns the packaged components
-func Draw(twipage TwiPage) fyne.CanvasObject {
+func Draw(twipage TwiPage) *fyne.Container {
 	opt := twipage.GetOptionContainer()
 	return container.NewVBox(opt)
 }
