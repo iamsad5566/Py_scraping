@@ -2,6 +2,7 @@ package component
 
 import (
 	"image/color"
+	"py-scraper-gui/component/twigui"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -9,12 +10,15 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+var selects = []string{"searchByKeyword", "searchByID"}
+var selection = &selects[1]
+
 // horizontalSpace serving as the border to split two neighboured objects
 var horizontalSpace string = "           " +
 	"                        "
 
 // title returns a canvasObject containing the label showing the current page's gist.
-func tittle(str string) fyne.CanvasObject {
+func Tittle(str string) fyne.CanvasObject {
 	titleText := canvas.NewText(str, nil)
 	titleText.TextSize = 50
 	titleText.TextStyle.Bold = true
@@ -23,24 +27,25 @@ func tittle(str string) fyne.CanvasObject {
 	return content
 }
 
-// tmp
-// TwitterLayout contains all the elements belonging to twitter related manipulations
+// TwitterLayout returns the GUI components depending on the selection
 func TwitterLayout() fyne.CanvasObject {
-	title := tittle("Twitter scraper")
+	title := Tittle("Twitter scraper")
 
 	// Insert a selection
 	selectContent := widget.NewSelect(selects, func(s string) {
 		selection = &s
 	})
 
-	selectContainer := container.NewBorder(canvas.NewText("", color.Opaque),
-		canvas.NewText("", color.Opaque), canvas.NewText(horizontalSpace, color.Opaque),
-		canvas.NewText(horizontalSpace, color.Opaque), selectContent)
+	// Creat spcae
+	space := canvas.NewText("", color.Opaque)
+	horizontal := canvas.NewText(horizontalSpace, color.Opaque)
+	selectContainer := container.NewBorder(space, space, horizontal,
+		horizontal, selectContent)
 
-	options := twiOption()
-	button := twiButton()
+	searchByID := twigui.SearchByID{}
+	gui := twigui.Draw(&searchByID)
 
-	content := container.NewVBox(title, selectContainer, options, button)
+	content := container.NewVBox(title, selectContainer, gui)
 
 	return content
 }

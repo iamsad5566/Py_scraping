@@ -9,7 +9,7 @@ import (
 )
 
 func FacebookLayout() fyne.CanvasObject {
-	title := tittle("Facebook scrper")
+	title := Tittle("Facebook scrper")
 	marginVertical := canvas.NewText(" ", color.Opaque)
 	marginHorizontal := canvas.NewText(horizontalSpace, color.Opaque)
 	content := container.NewBorder(marginVertical, marginVertical, marginHorizontal, nil, container.NewCenter(title))
