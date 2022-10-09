@@ -11,10 +11,11 @@ import (
 )
 
 var selects = []string{"searchByKeyword", "searchByID"}
-var selection = &selects[1]
+var selection = map[string]string{"searchByKeyword": "keyword", "searchByID": "ID"}
 
 // horizontalSpace serving as the border to split two neighboured objects
 var horizontalSpace string = "           " +
+	"                        " +
 	"                        "
 
 // title returns a canvasObject containing the label showing the current page's gist.
@@ -30,20 +31,23 @@ func Tittle(str string) fyne.CanvasObject {
 // TwitterLayout returns the GUI components depending on the selection
 func TwitterLayout() fyne.CanvasObject {
 	title := Tittle("Twitter scraper")
+	searchGUI := twigui.SearchGUI{Type: "keyword"}
+	gui := twigui.Draw(&searchGUI)
 
 	// Insert a selection
 	selectContent := widget.NewSelect(selects, func(s string) {
-		selection = &s
+		searchGUI.Type = s
+		gui.RemoveAll()
+		gui.Add(twigui.Draw(&searchGUI))
 	})
 
-	// Creat spcae
+	// Creat space
 	space := canvas.NewText("", color.Opaque)
 	horizontal := canvas.NewText(horizontalSpace, color.Opaque)
+
+	// Create a container for the selection bar
 	selectContainer := container.NewBorder(space, space, horizontal,
 		horizontal, selectContent)
-
-	searchByID := twigui.SearchByID{}
-	gui := twigui.Draw(&searchByID)
 
 	content := container.NewVBox(title, selectContainer, gui)
 
