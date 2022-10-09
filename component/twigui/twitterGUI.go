@@ -2,6 +2,9 @@ package twigui
 
 import "fyne.io/fyne/v2"
 
-type TwiGUI interface {
-	Layout() fyne.CanvasObject
+type TwiPage interface {
+	SetLabel(str string)
+	SetChoice(str string)
+	GetOptionContainer() fyne.CanvasObject
+	GetButton() fyne.CanvasObject
 }

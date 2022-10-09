@@ -19,32 +19,10 @@ var chosen *string
 var keyword *string
 var runTime *string
 
-// TwitterLayout contains all the elements belonging to twitter related manipulations
-func TwitterLayout() fyne.CanvasObject {
-	title := title("Twitter scraper")
-
-	// Insert a selection
-	selectContent := widget.NewSelect(selects, func(s string) {
-		selection = &s
-	})
-
-	selectContainer := container.NewBorder(canvas.NewText("", color.Opaque),
-		canvas.NewText("", color.Opaque), canvas.NewText(horizontalSpace, color.Opaque),
-		canvas.NewText(horizontalSpace, color.Opaque), selectContent)
-
-	options := twiOption()
-	button := twiButton()
-
-	content := container.NewVBox(title, selectContainer, options, button)
-
-	return content
-}
-
 // twiOption returns a canvasObject containing the options and keyword entry
 func twiOption() fyne.CanvasObject {
 	label := canvas.NewText("Select a mode to execute:", color.NRGBA{60, 80, 255, 255})
 	label.TextSize = 20
-	// horizontal := canvas.NewText(horizontalSpace, color.Opaque)
 	space := canvas.NewText(" ", color.Opaque)
 	space.TextSize = 10
 
