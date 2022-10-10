@@ -8,6 +8,7 @@ import time
 
 class ManipulateComponents:
     def __init__(self) -> None:
+        self.prefix = "https://twitter.com/"
         self.config = Config()
         self.driver = self.config.getDriver()
     
@@ -80,5 +81,34 @@ class ManipulateComponents:
         searchInput.send_keys(keyword)
         searchInput.send_keys(Keys.RETURN)
         
+    def scrapeByID(self, ID, run):
+        "scraeByID visits the home page of the ID owner and scraping the tweets one by one"
+        driver = self.driver
+        driver.get(self.prefix + ID)
+        time.sleep(3)
+        self.__parsingTweets(ID, run)
+            
+    def __parsingTweets(self, ID, run):
+        "__parsingTweets is serving for scrapeByID, once the page was navigated to the home page of the ID owner, __startScrapingTweets will be called for the following scraping works"
+        driver = self.driver
+        now = datetime.now()
+        currDate = now.strftime("%m_%d_%y")
+        output = os.getenv("fileOutput")
+        suffix = ".csv"
+        
+        for i in range(run):
+            timeLine = driver.find_element(By.XPATH, "//*[@id=\"react-root\"]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/section/div")
+            tweetsArr = timeLine.text.split("@"+ID)
+            self.__exportParsedTweets(tweetsArr, output+currDate+suffix)
+            
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(2)
+    
+    def __exportParsedTweets(self, tweetsArr, outputfile):
+        for tweet in tweetsArr:
+            with open(outputfile, "a", newline="", encoding="UTF-8") as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([tweet])
+    
     def closeDriver(self):
         self.driver.close()
