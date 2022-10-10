@@ -44,11 +44,10 @@ func TwitterLayout() fyne.CanvasObject {
 
 	// Creat space
 	space := canvas.NewText("", color.Opaque)
-	horizontal := canvas.NewText(horizontalSpace, color.Opaque)
-
+	
 	// Create a container for the selection bar
-	selectContainer := container.NewBorder(space, space, horizontal,
-		horizontal, selectContent)
+	selectContainer := container.NewBorder(space, space, space,
+		space, selectContent)
 
 	content := container.NewVBox(title, selectContainer, gui)
 
