@@ -1,7 +1,6 @@
 package twigui
 
 import (
-	"fmt"
 	"image/color"
 	"log"
 	"os/exec"
@@ -121,8 +120,9 @@ func (s *SearchByKeyword) twiExec(IDstr *string, RunStr *string) {
 
 	searchQ := strings.ReplaceAll(*IDstr, " ,", ",")
 	searchQ = strings.ReplaceAll(searchQ, ", ", ",")
+	searchQ = strings.ReplaceAll(searchQ, "@", "")
 
-	var args = []string{"twitter-scraping/mainKeyword.py", s.Choice}
+	var args = []string{"twitter-scraping/mainKeyword.py", strings.Split(s.Choice, " ")[0]}
 	if RunStr != nil && *RunStr != "" && *RunStr != "0" {
 		args = append(args, *RunStr)
 	} else {
@@ -131,8 +131,6 @@ func (s *SearchByKeyword) twiExec(IDstr *string, RunStr *string) {
 
 	IDs := strings.Split(searchQ, ",")
 	args = append(args, IDs...)
-
-	fmt.Println(args)
 
 	cmd := exec.Command("venv/bin/python3", args...)
 	err := cmd.Run()
