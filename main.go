@@ -46,6 +46,6 @@ func overallLayout() fyne.CanvasObject {
 	line := canvas.NewLine(color.Black)
 
 	choiceList := container.NewGridWithRows(3, space, container.NewGridWithColumns(3, choiceSpace, choice, choiceSpace), space)
-	content := container.NewBorder(space, space, container.NewCenter(choiceList), space, container.NewHBox(line, chosen))
+	content := container.NewBorder(space, space, container.NewCenter(choiceList), space, container.NewHBox(line, container.NewGridWithColumns(3,space, chosen,space)))
 	return content
 }
