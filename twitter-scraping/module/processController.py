@@ -27,3 +27,22 @@ class ProcessController:
             self.components.scrapeArticles(run)
         # Closing the driver
         self.components.closeDriver()
+        
+    def __commonProcessForIDSearching(self):
+        "For login components"
+        self.components.login()
+        
+    def singleID(self, ID, run):
+        "For single ID searching"
+        self.__commonProcessForIDSearching()
+        self.components.scrapeByID(ID, run)
+        self.components.closeDriver()
+        
+    def multipleIDs(self, IDs, run):
+        "For multiple IDs searching"
+        self.__commonProcessForIDSearching()
+        
+        for ID in IDs:
+            self.components.scrapeByID(ID, run)
+        
+        self.components.closeDriver()

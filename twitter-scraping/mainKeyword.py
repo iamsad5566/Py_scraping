@@ -1,7 +1,7 @@
 import sys
 from module.processController import ProcessController
 
-class TwitterPyScraping:
+class TwitterPyScrapingByKeyword:
     def __init__(self) -> None:
         self.procedure = ProcessController()
     
@@ -25,10 +25,10 @@ if __name__ == "__main__":
     
     args = sys.argv
     if len(args) == 3:
-        TwitterPyScraping().runSingleSearching(int(args[2]), args[3])
+        TwitterPyScrapingByKeyword().runSingleSearching(int(args[2]), args[3])
     else:
         keywords = keywordBuilder(args)
-        TwitterPyScraping().runMultipleSearching(int(args[2]), keywords)
+        TwitterPyScrapingByKeyword().runMultipleSearching(int(args[2]), keywords)
         
         
         
