@@ -20,7 +20,7 @@ output=output/
 once you execute the main.go file, you should see a GUI interface as follows:
 ![](doc/empty.png)
 
-Select which mode to execute depends on your need:
+Select which mode to execute by your needing:
 ![](doc/withIDs.png)
 
 Scraping would be started after pressing "Go!" button.
