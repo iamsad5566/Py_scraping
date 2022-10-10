@@ -5,7 +5,7 @@
 ## Twitter-scraping 
 > scraping information from Twitter by using selenium  
 
-Virtual environment: Python 3.10.1  
+Virtual environment: **Python 3.10.1** ( must be Python 3.10 up version because of the syntax issue )
 To use the library, you will need a `.env` file under the `twitter-scraping` folder, elements within this file are as follows:
 ```
 operateSystem=mac_ARM
@@ -16,6 +16,14 @@ name=your Twitter account name
 password=your Twitter password
 output=output/
 ```
+
+once you execute the main.go file, you should see a GUI interface as follows:
+![](doc/empty.png)
+
+Select which mode to execute depends on your need:
+![](doc/withIDs.png)
+
+Scraping would be started after pressing "Go!" button.
   
 ---
 ## Facebook-scraping
