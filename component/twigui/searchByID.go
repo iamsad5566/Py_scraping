@@ -13,34 +13,32 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-type SearchGUI struct {
+type SearchByID struct {
 	Choice    string
 	LabelText string
-	Type      string
 }
 
-// Checked if the SearchGUI implements the TwiPage interface
-var _ TwiPage = (*SearchGUI)(nil)
-var option = []string{"Single searching", "Multiple searching"}
+// Checked if the SearchByID implements the TwiPage interface
+var _ TwiPage = (*SearchByID)(nil)
 
-// SetChoice sets the Choice variale for the SearchGUI object
-func (s *SearchGUI) SetChoice(str string) {
+// SetChoice sets the Choice variale for the SearchByID object
+func (s *SearchByID) SetChoice(str string) {
 	s.Choice = str
 }
 
-// SetLabel sets the LabelText Choice variable for the SearchGUI object
-func (s *SearchGUI) SetLabel(str string) {
+// SetLabel sets the LabelText Choice variable for the SearchByID object
+func (s *SearchByID) SetLabel(str string) {
 	label := ""
 	if str == "Single searching" {
-		label = s.Type + ":"
+		label = "ID:"
 	} else if str == "Multiple searching" {
-		label = s.Type + "s:"
+		label = "IDs:"
 	}
 	s.LabelText = label
 }
 
 // GetOptionContainer returns the fyne.CanvasObject that shows the executed mode of the scraper
-func (s *SearchGUI) GetOptionContainer() fyne.CanvasObject {
+func (s *SearchByID) GetOptionContainer() fyne.CanvasObject {
 	label := canvas.NewText("Select a mode to execute:", color.NRGBA{60, 80, 255, 255})
 	label.TextSize = 20
 	space := canvas.NewText(" ", color.Opaque)
@@ -65,7 +63,7 @@ func (s *SearchGUI) GetOptionContainer() fyne.CanvasObject {
 }
 
 // getEntruesAndBtnContainer returns the entry and button depending on the chosen option
-func (s *SearchGUI) getEntriesAndBtnContainer(str string) fyne.CanvasObject {
+func (s *SearchByID) getEntriesAndBtnContainer(str string) fyne.CanvasObject {
 	s.SetLabel(str)
 	label := canvas.NewText(s.LabelText, nil)
 	label.TextSize = 15
@@ -89,14 +87,14 @@ func (s *SearchGUI) getEntriesAndBtnContainer(str string) fyne.CanvasObject {
 }
 
 // getButton returns the button so that the user can manipulate the scraper by simply providing some parameters and pressing the button
-func (s *SearchGUI) getButton(IDstr *string, RunStr *string) fyne.CanvasObject {
+func (s *SearchByID) getButton(IDstr *string, RunStr *string) fyne.CanvasObject {
 	notification := canvas.NewText("", color.Opaque)
 	notification.TextSize = 20
 	notification.TextStyle.Bold = true
 
 	button := widget.NewButton("              Go!             ", func() {
 		if *IDstr == "" {
-			notification.Text = "Please fill in the " + s.Type + "!"
+			notification.Text = "Please fill in the ID!"
 		} else {
 			notification.Text = ""
 			notification.Color = color.Opaque
@@ -116,7 +114,7 @@ func (s *SearchGUI) getButton(IDstr *string, RunStr *string) fyne.CanvasObject {
 }
 
 // twiExec is responsible for receiving the parameters and executing the Python program
-func (s *SearchGUI) twiExec(IDstr *string, RunStr *string) {
+func (s *SearchByID) twiExec(IDstr *string, RunStr *string) {
 	if *IDstr == "" {
 		return
 	}
