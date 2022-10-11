@@ -92,18 +92,16 @@ func (s *SearchByID) getButton(IDstr *string, RunStr *string) fyne.CanvasObject 
 	notification.TextStyle.Bold = true
 
 	button := widget.NewButton("              Go!             ", func() {
-		if *IDstr == "" {
-			notification.Text = "Please fill in the ID!"
-		} else {
-			notification.Text = ""
+		message := s.twiExec(IDstr, RunStr)
+		notification.Text = message
+		if notification.Text == "" {
 			notification.Color = color.Opaque
 			notification.Refresh()
-			s.twiExec(IDstr, RunStr)
 			return
 		}
+
 		notification.Color = color.RGBA{255, 0, 0, 255}
 		notification.Refresh()
-
 	})
 
 	space := canvas.NewText(" ", color.Opaque)
@@ -113,9 +111,9 @@ func (s *SearchByID) getButton(IDstr *string, RunStr *string) fyne.CanvasObject 
 }
 
 // twiExec is responsible for receiving the parameters and executing the Python program
-func (s *SearchByID) twiExec(IDstr *string, RunStr *string) {
+func (s *SearchByID) twiExec(IDstr *string, RunStr *string) string {
 	if *IDstr == "" {
-		return
+		return "Please fill in the ID!"
 	}
 
 	searchQ := strings.ReplaceAll(*IDstr, " ,", ",")
@@ -130,6 +128,10 @@ func (s *SearchByID) twiExec(IDstr *string, RunStr *string) {
 	}
 
 	IDs := strings.Split(searchQ, ",")
+	if s.Choice == "Single searching" && len(IDs) > 1 {
+		return "Wrong mode!"
+	}
+
 	args = append(args, IDs...)
 
 	cmd := exec.Command("venv/bin/python3", args...)
@@ -137,4 +139,5 @@ func (s *SearchByID) twiExec(IDstr *string, RunStr *string) {
 	if err != nil {
 		log.Println(err)
 	}
+	return ""
 }
