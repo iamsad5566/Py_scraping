@@ -14,10 +14,10 @@ class TwitterPyScrapingByKeyword:
         self.procedure.multipleSearching(run, keywords=keywords)
         
 if __name__ == "__main__":
-    # args[0] is the path of venv
-    # args[1] is the file path and file name
-    # args[2] is the execute mode
-    # args[3] is the run times
+    # args[0] is the file path and file name
+    # args[1] is the execute mode
+    # args[2] is the run times
+    # args[3] is the keyword(s)
     def keywordBuilder(args):
         output = []
         for i in range(3, len(args)):
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         return output
     
     args = sys.argv
-    if len(args) == 4:
+    if args[1] == "Single":
         TwitterPyScrapingByKeyword().runSingleSearching(int(args[2]), args[3])
     else:
         keywords = keywordBuilder(args)
