@@ -44,3 +44,6 @@ twigui
 
  newsgui
  - Brainstorming
+
+ ### Note
+ - Login information has been encrypted by Facebook and Twitter. Though the API could be found, it is hard to send a set of the right parameters toward it.
