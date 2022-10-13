@@ -86,21 +86,20 @@ func (s *SearchByKeyword) getEntriesAndBtnContainer(str string) fyne.CanvasObjec
 }
 
 // getButton returns the button so that the user can manipulate the scraper by simply providing some parameters and pressing the button
-func (s *SearchByKeyword) getButton(IDstr *string, RunStr *string) fyne.CanvasObject {
+func (s *SearchByKeyword) getButton(keywordStr *string, RunStr *string) fyne.CanvasObject {
 	notification := canvas.NewText("", color.Opaque)
 	notification.TextSize = 20
 	notification.TextStyle.Bold = true
 
 	button := widget.NewButton("              Go!             ", func() {
-		if *IDstr == "" {
-			notification.Text = "Please fill in the keyword!"
-		} else {
-			notification.Text = ""
+		message := s.twiExec(keywordStr, RunStr)
+		notification.Text = message
+		if notification.Text == "" {
 			notification.Color = color.Opaque
 			notification.Refresh()
-			s.twiExec(IDstr, RunStr)
 			return
 		}
+
 		notification.Color = color.RGBA{255, 0, 0, 255}
 		notification.Refresh()
 
@@ -113,12 +112,12 @@ func (s *SearchByKeyword) getButton(IDstr *string, RunStr *string) fyne.CanvasOb
 }
 
 // twiExec is responsible for receiving the parameters and executing the Python program
-func (s *SearchByKeyword) twiExec(IDstr *string, RunStr *string) {
-	if *IDstr == "" {
-		return
+func (s *SearchByKeyword) twiExec(keywordStr *string, RunStr *string) string {
+	if *keywordStr == "" {
+		return "Please fill in the ID!"
 	}
 
-	searchQ := strings.ReplaceAll(*IDstr, " ,", ",")
+	searchQ := strings.ReplaceAll(*keywordStr, " ,", ",")
 	searchQ = strings.ReplaceAll(searchQ, ", ", ",")
 	searchQ = strings.ReplaceAll(searchQ, "@", "")
 
@@ -130,6 +129,10 @@ func (s *SearchByKeyword) twiExec(IDstr *string, RunStr *string) {
 	}
 
 	IDs := strings.Split(searchQ, ",")
+	if s.Choice == "Single searching" && len(IDs) > 1 {
+		return "Wrong mode!"
+	}
+
 	args = append(args, IDs...)
 
 	cmd := exec.Command("venv/bin/python3", args...)
@@ -137,4 +140,6 @@ func (s *SearchByKeyword) twiExec(IDstr *string, RunStr *string) {
 	if err != nil {
 		log.Println(err)
 	}
+
+	return ""
 }
