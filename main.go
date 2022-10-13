@@ -14,7 +14,7 @@ import (
 var width float32 = 1200
 var height float32 = 800
 
-var data = []string{"Twitter", "News", "Facebook"}
+var data = []string{"Twitter", "News"}
 
 func main() {
 	openGUI()
@@ -33,7 +33,7 @@ func openGUI() {
 
 // overLayout contains all the components and make them be arranged appropriately
 func overallLayout() fyne.CanvasObject {
-	var guiMap = map[string]fyne.CanvasObject{"Twitter": component.TwitterLayout(), "Facebook": component.FacebookLayout(), "News": canvas.NewText("", color.Opaque)}
+	var guiMap = map[string]fyne.CanvasObject{"Twitter": component.TwitterLayout(), "News": canvas.NewText("", color.Opaque)}
 	chosen := container.NewCenter(guiMap[data[0]])
 	choice := widget.NewRadioGroup(data, func(s string) {
 		chosen.RemoveAll()
